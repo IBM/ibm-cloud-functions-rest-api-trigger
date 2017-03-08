@@ -1,22 +1,16 @@
 # OpenWhisk Building Block - HTTP REST Trigger
-[Create REST API mappings](https://github.com/IBM/openwhisk-serverless-apis/wiki) with Apache OpenWhisk on IBM Bluemix. This tutorial takes less than 5 minutes to complete.
+[Create REST API mappings](https://github.com/IBM/openwhisk-serverless-apis/wiki) with Apache OpenWhisk on IBM Bluemix. This tutorial takes less than 5 minutes to complete. After this, move on to more complex serverless applications such as those tagged [_openwhisk-hands-on-demo_](https://github.com/search?q=topic%3Aopenwhisk-hands-on-demo+org%3AIBM&type=Repositories).
 
-If you're not familiar with the OpenWhisk programming model [try the action, trigger, and rule sample first](https://github.com/IBM/openwhisk-action-trigger-rule).
-
-[You'll need a Bluemix account and the latest OpenWhisk command line tool](docs/OPENWHISK.md).
-
-After this, move on to more complex serverless applications such as those tagged [_openwhisk-hands-on-demo_](https://github.com/search?q=topic%3Aopenwhisk-hands-on-demo+org%3AIBM&type=Repositories).
+If you're not familiar with the OpenWhisk programming model [try the action, trigger, and rule sample first](https://github.com/IBM/openwhisk-action-trigger-rule). [You'll need a Bluemix account and the latest OpenWhisk command line tool](docs/OPENWHISK.md).
 
 This example provides two REST endpoints, HTTP `POST` and `GET` methods that are mapped to corresponding OpenWhisk `create-cat` and `fetch-cat` actions.
-
-Steps
 
 1. [Create OpenWhisk actions](#1-create-openwhisk-actions-)
 2. [Create REST endpoints](#2-create-rest-endpoints)
 4. [Clean up](#3-clean-up)
 
 # 1. Create OpenWhisk actions
-Create a file named `create-cat.js` with the following content.
+## Create a file named `create-cat.js`
 ```javascript
 function main(params) {
 
@@ -41,7 +35,7 @@ function main(params) {
 }
 ```
 
-Create a file named `fetch-cat.js` with the following content.
+## Create a file named `fetch-cat.js`
 ```javascript
 function main(params) {
 
@@ -67,7 +61,7 @@ function main(params) {
 }
 ```
 
-Upload them to OpenWhisk and test.
+## Upload actions and test
 
 ```bash
 # Create
@@ -90,7 +84,7 @@ wsk action invoke \
 > **Note**: If you see any error messages, refer to the [Troubleshooting](#troubleshooting) section below.
 
 # 2. Create REST endpoints
-Create POST and GET REST mappings for the `/v1/cat` endpoint.
+## Create POST and GET REST mappings for `/v1/cat` endpoint
 
 ```bash
 # POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
@@ -100,7 +94,7 @@ wsk api-experimental create -n "Cats API" /v1 /cat post create-cat
 wsk api-experimental create /v1 /cat get fetch-cat
 ```
 
-Test them with curl or another tool that can send HTTP requests.
+## Test with `curl` HTTP requests
 ```bash
 # Get the REST URL base
 export CAT_API_URL=`wsk api-experimental list | tail -1 | awk '{print $5}'`
@@ -113,7 +107,7 @@ curl ${CAT_API_URL}?id=1
 ```
 
 # 4. Clean up
-Remove the API mappings and delete the actions.
+## Remove the API mappings and delete the actions
 
 ```bash
 # Remove API base
