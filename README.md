@@ -5,7 +5,7 @@ If you're not familiar with the OpenWhisk programming model [try the action, tri
 
 This example provides two REST endpoints, HTTP `POST` and `GET` methods that are mapped to corresponding OpenWhisk `create-cat` and `fetch-cat` actions.
 
-1. [Create OpenWhisk actions](#1-create-openwhisk-actions-)
+1. [Create OpenWhisk actions](#1-create-openwhisk-actions)
 2. [Create REST endpoints](#2-create-rest-endpoints)
 4. [Clean up](#3-clean-up)
 
@@ -106,7 +106,7 @@ curl -X POST -d "{\"name\":\"Tahoma\",\"color\":\"Tabby\"}" $CAT_API_URL
 curl ${CAT_API_URL}?id=1
 ```
 
-# 4. Clean up
+# 3. Clean up
 ## Remove the API mappings and delete the actions
 
 ```bash
