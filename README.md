@@ -10,7 +10,7 @@ This example provides two REST endpoints, HTTP `POST` and `GET` methods that are
 4. [Clean up](#3-clean-up)
 
 # 1. Create OpenWhisk actions
-Create a file named `create-cat.js`. This file will contain a javascript function to create a cat. It checks for the required parameters(`name` and `color`) and returns 201, or an error if either parameter is missing. This example is simplified, and does not connect to a backend datastore. For a more complicated example, check out this [REST API example](https://github.com/IBM/openwhisk-serverless-apis).
+Create a file named `create-cat.js`. This file will define an OpenWhisk action written as a JavaScript function. It checks for the required parameters(`name` and `color`) and returns 201, or an error if either parameter is missing. This example is simplified, and does not connect to a backend datastore. For a more complicated example, check out this [REST API example](https://github.com/IBM/openwhisk-serverless-apis).
 ```javascript
 function main(params) {
 
@@ -37,7 +37,7 @@ function main(params) {
 }
 ```
 
-Create a file named `fetch-cat.js`. This file will contain a javascript function to get a cat. It checks for the required parameter(`id`) and returns Tahoma, the tabby colored cat. Again, for the purpose of this simplified demo we always return Tahoma the cat, rather than connecting to a backend datastore.
+Create a file named `fetch-cat.js`. This file will define an OpenWhisk action written as a JavaScript function. It checks for the required parameter(`id`) and returns Tahoma, the tabby colored cat. Again, for the purpose of this simplified demo we always return Tahoma the cat, rather than connecting to a backend datastore.
 ```javascript
 function main(params) {
 
@@ -66,7 +66,7 @@ function main(params) {
 ```
 
 ## Upload actions and test
-The next step will be to create OpenWhisk actions from the javascript functions that we just created. To create an action, use the wsk CLI command: `wsk action create [action name] [javascript file]`
+The next step will be to create OpenWhisk actions from the JavaScript functions that we just created. To create an action, use the wsk CLI command: `wsk action create [action name] [JavaScript file]`
 ```bash
 wsk action create create-cat create-cat.js
 wsk action create fetch-cat fetch-cat.js
