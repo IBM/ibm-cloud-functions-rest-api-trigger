@@ -10,7 +10,7 @@ This example provides two REST endpoints, HTTP `POST` and `GET` methods that are
 4. [Clean up](#3-clean-up)
 
 # 1. Create OpenWhisk actions
-## Create a file named `create-cat.js`
+Create a file named `create-cat.js`. This file will define an OpenWhisk action written as a JavaScript function. It checks for the required parameters(`name` and `color`) and returns 201, or an error if either parameter is missing. This example is simplified, and does not connect to a backend datastore. For a more complicated example, check out this [REST API example](https://github.com/IBM/openwhisk-serverless-apis).
 ```javascript
 function main(params) {
 
@@ -37,7 +37,7 @@ function main(params) {
 }
 ```
 
-## Create a file named `fetch-cat.js`
+Create a file named `fetch-cat.js`. This file will define an OpenWhisk action written as a JavaScript function. It checks for the required parameter(`id`) and returns Tahoma, the tabby colored cat. Again, for the purpose of this simplified demo we always return Tahoma the cat, rather than connecting to a backend datastore.
 ```javascript
 function main(params) {
 
@@ -66,13 +66,14 @@ function main(params) {
 ```
 
 ## Upload actions and test
-
+The next step will be to create OpenWhisk actions from the JavaScript functions that we just created. To create an action, use the wsk CLI command: `wsk action create [action name] [JavaScript file]`
 ```bash
-# Create
 wsk action create create-cat create-cat.js
 wsk action create fetch-cat fetch-cat.js
+```
+OpenWhisk actions are stateless code snippets that can be invoked explicitly or in response to an event. For right now, we will test our actions by explicitly invoking them. Later, we will trigger our actions in response to an HTTP request. Invoke the actions using the code below and pass the parameters using the `--param` command line argument.
 
-# Test
+```bash
 wsk action invoke \
   --blocking \
   --param name Tahoma \
@@ -89,7 +90,8 @@ wsk action invoke \
 
 # 2. Create REST endpoints
 ## Create POST and GET REST mappings for `/v1/cat` endpoint
-
+Now that we have our OpenWhisk actions created, we will expose our OpenWhisk actions through the OpenWhisk API Gateway. To do this we will use: `wsk api-experimental create ([BASE_PATH] API_PATH API_VERB ACTION] [API PATH]`
+This feature is currently experimental to enable users an early opportunity to try it out and provide feedback
 ```bash
 # POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
 wsk api-experimental create -n "Cats API" /v1 /cat post create-cat
@@ -99,6 +101,8 @@ wsk api-experimental create /v1 /cat get fetch-cat
 ```
 
 ## Test with `curl` HTTP requests
+Take note of the API URL that is generated from the previous command. Send an http POST and GET request using CuRL to test the actions. Remember to send the required parameters in the body of the request for POST, or as path parameters for GET. OpenWhisk automatically forwards these parameters to the actions we created.
+
 ```bash
 # Get the REST URL base
 export CAT_API_URL=`wsk api-experimental list | tail -1 | awk '{print $5}'`
