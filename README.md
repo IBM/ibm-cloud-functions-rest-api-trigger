@@ -24,15 +24,19 @@ function main(params) {
         'Content-Type': 'application/json'
       },
       statusCode: 400,
-      body: {"error": "Name parameter not set"}
+      body: new Buffer(JSON.stringify({
+        "error": "Name parameter not set"
+      })).toString('base64')
     }
   } else {
     return {
       headers: {
         'Content-Type': 'application/json'
       },
-      statusCode: 200,
-      body: {"id": "1"}
+      statusCode: 201,
+      body: new Buffer(JSON.stringify({
+        "id": "1"
+      })).toString('base64')
     }
   }
 
@@ -53,7 +57,9 @@ function main(params) {
         'Content-Type': 'application/json'
       },
       statusCode: 400,
-      body: {"error": "Name parameter not set"}
+      body: new Buffer(JSON.stringify({
+        "error": "ID parameter not set"
+      })).toString('base64')
     }
   } else {
     return {
@@ -61,7 +67,11 @@ function main(params) {
         'Content-Type': 'application/json'
       },
       statusCode: 200,
-      body: {"id": "1", "name": "Tahoma", "color": "Tabby"}
+      body: new Buffer(JSON.stringify({
+        "id": "1",
+        "name": "Tahoma",
+        "color": "Tabby"
+      })).toString('base64')
     }
   }
 
