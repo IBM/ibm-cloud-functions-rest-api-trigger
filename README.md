@@ -14,25 +14,27 @@ Create a file named `create-cat.js`. This file will define an OpenWhisk action w
 ```javascript
 function main(params) {
 
-  return new Promise(function(resolve, reject) {
-    console.log(params.name);
-    console.log(params.color);
+  console.log(params.name);
+  console.log(params.color);
 
-    if (!params.name) {
-      console.error('name parameter not set.');
-      reject({
-        'error': 'name parameter not set.'
-      });
-      return;
-    } else {
-      resolve({
-        statusCode: 201,
-        id: 1
-      });
-      return;
+  if (!params.name) {
+    console.error('name parameter not set.');
+    return {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      statusCode: 400,
+      body: {"error": "Name parameter not set"}
     }
-
-  });
+  } else {
+    return {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      statusCode: 200,
+      body: {"id": "1"}
+    }
+  }
 
 }
 ```
@@ -41,35 +43,36 @@ Create a file named `fetch-cat.js`. This file will define an OpenWhisk action wr
 ```javascript
 function main(params) {
 
-  return new Promise(function(resolve, reject) {
-    console.log(params.id);
+  console.log(params.name);
+  console.log(params.color);
 
-    if (!params.id) {
-      console.error('id parameter not set.');
-      reject({
-        'error': 'id parameter not set.'
-      });
-      return;
-    } else {
-      resolve({
-        statusCode: 200,
-        id: 1,
-        name: 'Tahoma',
-        color: 'Tabby'
-      });
-      return;
+  if (!params.id) {
+    console.error('id parameter not set.');
+    return {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      statusCode: 400,
+      body: {"error": "Name parameter not set"}
     }
-
-  });
+  } else {
+    return {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      statusCode: 200,
+      body: {"id": "1", "name": "Tahoma", "color": "Tabby"}
+    }
+  }
 
 }
 ```
 
 ## Upload actions and test
-The next step will be to create OpenWhisk actions from the JavaScript functions that we just created. To create an action, use the wsk CLI command: `wsk action create [action name] [JavaScript file]`
+The next step will be to create OpenWhisk actions from the JavaScript functions that we just created. To create an action, use the wsk CLI command: `wsk action create [action name] [JavaScript file]  --web true`
 ```bash
-wsk action create create-cat create-cat.js
-wsk action create fetch-cat fetch-cat.js
+wsk action update create-cat create-cat.js --web true
+wsk action update fetch-cat fetch-cat.js --web true
 ```
 OpenWhisk actions are stateless code snippets that can be invoked explicitly or in response to an event. For right now, we will test our actions by explicitly invoking them. Later, we will trigger our actions in response to an HTTP request. Invoke the actions using the code below and pass the parameters using the `--param` command line argument.
 
