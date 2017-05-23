@@ -17,21 +17,15 @@ Create a file named `create-cat.js`. This file will define an OpenWhisk action w
 function main(params) {
 
   return new Promise(function(resolve, reject) {
-    console.log(params.name);
-    console.log(params.color);
 
     if (!params.name) {
-      console.error('name parameter not set.');
       reject({
         'error': 'name parameter not set.'
       });
-      return;
     } else {
       resolve({
-        statusCode: 201,
         id: 1
       });
-      return;
     }
 
   });
@@ -44,22 +38,17 @@ Create a file named `fetch-cat.js`. This file will define an OpenWhisk action wr
 function main(params) {
 
   return new Promise(function(resolve, reject) {
-    console.log(params.id);
 
     if (!params.id) {
-      console.error('id parameter not set.');
       reject({
         'error': 'id parameter not set.'
       });
-      return;
     } else {
       resolve({
-        statusCode: 200,
-        id: 1,
+        id: params.id,
         name: 'Tahoma',
         color: 'Tabby'
       });
-      return;
     }
 
   });
@@ -70,9 +59,11 @@ function main(params) {
 ## Upload actions and test
 The next step will be to create OpenWhisk actions from the JavaScript functions that we just created. To create an action, use the wsk CLI command: `wsk action create [action name] [JavaScript file]`
 ```bash
-wsk action create create-cat create-cat.js
-wsk action create fetch-cat fetch-cat.js
+wsk action create create-cat create-cat.js --web true
+wsk action create fetch-cat fetch-cat.js --web true
 ```
+We've also added the flag, `--web true`, to annotate these actions as "Web Actions". This will be necessary later when we add REST endpoints.
+
 OpenWhisk actions are stateless code snippets that can be invoked explicitly or in response to an event. For right now, we will test our actions by explicitly invoking them. Later, we will trigger our actions in response to an HTTP request. Invoke the actions using the code below and pass the parameters using the `--param` command line argument.
 
 ```bash
@@ -92,28 +83,29 @@ wsk action invoke \
 
 # 2. Create REST endpoints
 ## Create POST and GET REST mappings for `/v1/cat` endpoint
-Now that we have our OpenWhisk actions created, we will expose our OpenWhisk actions through the OpenWhisk API Gateway. To do this we will use: `wsk api-experimental create ([BASE_PATH] API_PATH API_VERB ACTION] [API PATH]`
-This feature is currently experimental to enable users an early opportunity to try it out and provide feedback
+Now that we have our OpenWhisk actions created, we will expose our OpenWhisk actions through the OpenWhisk API Gateway. To do this we will use: `wsk api create ([BASE_PATH] API_PATH API_VERB ACTION] [API PATH]`
+
+This feature is part of the "Bluemix Native API Management" feature and currently supports very powerful API management features like security, rate limiting, and more. For now though we're just using the CLI to expose our action with a REST endpoint. You can read more about this feature here: [API Gateway](https://console.ng.bluemix.net/docs/openwhisk/openwhisk_apigateway.html#openwhisk_apigateway).
+
 ```bash
 # POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
-wsk api-experimental create -n "Cats API" /v1 /cat post create-cat
+wsk api create -n "Cats API" /v1 /cat post create-cat
 
 # GET /v1/cat?id=1
-wsk api-experimental create /v1 /cat get fetch-cat
+wsk api create /v1 /cat get fetch-cat
 ```
+In both cases, the CLI will output the URL required to use the API. Make note of those URLs!
 
 ## Test with `curl` HTTP requests
 Take note of the API URL that is generated from the previous command. Send an http POST and GET request using CuRL to test the actions. Remember to send the required parameters in the body of the request for POST, or as path parameters for GET. OpenWhisk automatically forwards these parameters to the actions we created.
 
 ```bash
-# Get the REST URL base
-export CAT_API_URL=`wsk api-experimental list | tail -1 | awk '{print $5}'`
 
 # POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
-curl -X POST -d "{\"name\":\"Tahoma\",\"color\":\"Tabby\"}" $CAT_API_URL
+curl -X POST -H 'Content-Type: application/json' -d '{"name":"Tahoma","color":"Tabby"}' <<USE THE URL FROM ABOVE>>
 
 # GET /v1/cat?id=1
-curl ${CAT_API_URL}?id=1
+curl <<USE THE URL FROM ABOVE>>?id=1
 ```
 
 # 3. Clean up
@@ -121,7 +113,7 @@ curl ${CAT_API_URL}?id=1
 
 ```bash
 # Remove API base
-wsk api-experimental delete /v1
+wsk api delete /v1
 
 # Remove actions
 wsk action delete create-cat
