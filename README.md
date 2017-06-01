@@ -88,6 +88,8 @@ Now that we have our OpenWhisk actions created, we will expose our OpenWhisk act
 This feature is part of the "Bluemix Native API Management" feature and currently supports very powerful API management features like security, rate limiting, and more. For now though we're just using the CLI to expose our action with a REST endpoint. You can read more about this feature here: [API Gateway](https://console.ng.bluemix.net/docs/openwhisk/openwhisk_apigateway.html#openwhisk_apigateway).
 
 ```bash
+wsk bluemix login --user $YOUR_BLUEMIX_USERNAME --password $YOUR_BLUEMIX_PASSWORD
+
 # POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
 wsk api create -n "Cats API" /v1 /cat post create-cat
 
@@ -100,12 +102,11 @@ In both cases, the CLI will output the URL required to use the API. Make note of
 Take note of the API URL that is generated from the previous command. Send an http POST and GET request using CuRL to test the actions. Remember to send the required parameters in the body of the request for POST, or as path parameters for GET. OpenWhisk automatically forwards these parameters to the actions we created.
 
 ```bash
-
 # POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
-curl -X POST -H 'Content-Type: application/json' -d '{"name":"Tahoma","color":"Tabby"}' <<USE THE URL FROM ABOVE>>
+curl -X POST -H 'Content-Type: application/json' -d '{"name":"Tahoma","color":"Tabby"}' $THE_URL_FROM_ABOVE
 
 # GET /v1/cat?id=1
-curl <<USE THE URL FROM ABOVE>>?id=1
+curl $THE_URL_FROM_ABOVE?id=1
 ```
 
 # 3. Clean up
