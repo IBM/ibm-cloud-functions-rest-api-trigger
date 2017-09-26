@@ -1,4 +1,7 @@
 # OpenWhisk Building Block - HTTP REST API Trigger
+
+*Read this in other languages: [한국어](README-ko.md).*
+
 Create REST API mappings with Apache OpenWhisk on IBM Bluemix. This tutorial should take about 5 minutes to complete. After this, move on to more complex serverless applications such as those tagged [_openwhisk-hands-on-demo_](https://github.com/search?q=topic%3Aopenwhisk-hands-on-demo+org%3AIBM&type=Repositories).
 
 ![Sample Architecture](openwhisk-rest-api-trigger.png)
