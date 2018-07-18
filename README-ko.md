@@ -116,6 +116,7 @@ bx wsk api create -n "Cats API" /v1 /cat post create-cat
 # 노출 /v1/cat?id=1
 bx wsk api create /v1 /cat get fetch-cat
 ```
+
 CLI는 두 가지 경우 모두 API 이용을 위한 URL을 출력합니다. 다음 영역에서 사용을 위해 모든 정보를 기록해 두십시오.
 
 ### `curl` HTTP 요청으로 테스트 하기

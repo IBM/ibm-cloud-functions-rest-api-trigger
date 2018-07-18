@@ -113,8 +113,8 @@ bx wsk api create -n "Cats API" /v1 /cat post create-cat
 
 # Exposes /v1/cat?id=1
 bx wsk api create /v1 /cat get fetch-cat
-
 ```
+
 In both cases, the CLI will output the URL required to use the API. Make note of it for the next section.
 
 ### Test with `curl` HTTP requests
