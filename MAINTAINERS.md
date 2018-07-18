@@ -1,4 +1,4 @@
-## Maintainers Guide
+# Maintainers Guide
 
 This guide is intended for maintainers — anybody with commit access to one or more Developer Technology repositories.
 
