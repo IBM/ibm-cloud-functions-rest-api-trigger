@@ -107,9 +107,6 @@ bx wsk action invoke \
 이 기능은 [Bluemix Native API Management](https://console.ng.bluemix.net/docs/openwhisk/openwhisk_apigateway.html#openwhisk_apigateway)의 일부이며 현재 보안, 속도 제한 등과 같은 매우 강력한 API 관리 기능을 제공합니다. 비록 지금은 단지 CLI를 사용하여 public REST endpoint로 액션을 노출하고 있습니다.
 
 ```bash
-# 명령과 함께 신임 정보를 보내거나 대화식으로 제공합니다
-bx wsk bluemix login --user $YOUR_BLUEMIX_USERNAME --password $YOUR_BLUEMIX_PASSWORD
-
 # POST로 노출 /v1/cat {"name": "Tahoma", "color": "Tabby"}
 bx wsk api create -n "Cats API" /v1 /cat post create-cat
 

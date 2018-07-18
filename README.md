@@ -105,9 +105,6 @@ Now that we have our Cloud Functions created, we will expose them through the Bl
 This feature is part of the [IBM Cloud Native API Management](https://console.ng.bluemix.net/docs/openwhisk/openwhisk_apigateway.html#openwhisk_apigateway) service and currently supports very powerful API management features like security, rate limiting, and more. For now though we're just using the CLI to expose our action with a public REST endpoint.
 
 ```bash
-# Send along credentials with the command or provide them interactively
-bx wsk bluemix login --user $YOUR_BLUEMIX_USERNAME --password $YOUR_BLUEMIX_PASSWORD
-
 # Exposes POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
 bx wsk api create -n "Cats API" /v1 /cat post create-cat
 
