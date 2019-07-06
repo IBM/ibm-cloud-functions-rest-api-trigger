@@ -6,7 +6,7 @@ Create REST API mappings with IBM Cloud Functions powered by Apache OpenWhisk. T
 
 ![Sample Architecture](openwhisk-rest-api-trigger.png)
 
-If you're not familiar with the Cloud Functions/OpenWhisk programming model [try the action, trigger, and rule sample first](https://github.com/IBM/openwhisk-action-trigger-rule). [You'll need an IBM Cloud account and the latest OpenWhisk (`bx wsk`) or IBM Cloud command line plugin (`bx bx wsk`)](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md).
+If you're not familiar with the Cloud Functions/OpenWhisk programming model [try the action, trigger, and rule sample first](https://github.com/IBM/openwhisk-action-trigger-rule). [You'll need an IBM Cloud account and the latest OpenWhisk (`ibmcloud fn`) or IBM Cloud command line plugin (`ibmcloud fn`)](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md).
 
 This example provides two REST endpoints for HTTP `POST` and `GET` methods that are mapped to corresponding `create-cat` and `fetch-cat` Cloud Functions (OpenWhisk actions).
 
@@ -73,8 +73,8 @@ function main(params) {
 The next step will be to deploy Cloud Functions from the JavaScript files that we just created. We also add the `--web true` flag, to annotate these actions as "Web Actions". This will be necessary later when we add REST endpoints as it makes the actions HTTP-aware.
 
 ```bash
-bx wsk action create create-cat create-cat.js --web true
-bx wsk action create fetch-cat fetch-cat.js --web true
+ibmcloud fn action create create-cat create-cat.js --web true
+ibmcloud fn action create fetch-cat fetch-cat.js --web true
 ```
 
 ### Unit test the actions
@@ -82,13 +82,13 @@ bx wsk action create fetch-cat fetch-cat.js --web true
 Cloud Functions (OpenWhisk actions) are stateless code snippets that can be invoked explicitly or in response to an event. For right now, we will test our actions by explicitly invoking them. Later, we will trigger our actions in response to an HTTP request. Invoke the actions using the code below and pass the parameters using the `--param` command line argument.
 
 ```bash
-bx wsk action invoke \
+ibmcloud fn action invoke \
   --blocking \
   --param name Tahoma \
   --param color Tabby \
   create-cat
 
-bx wsk action invoke \
+ibmcloud fn action invoke \
   --blocking \
   --param id 1 \
   fetch-cat
@@ -100,16 +100,16 @@ bx wsk action invoke \
 
 ### Create POST and GET REST mappings for `/v1/cat` endpoint
 
-Now that we have our Cloud Functions created, we will expose them through the Bluemix API Gateway. To do this we use: `bx wsk api create $BASE_PATH $API_PATH $API_VERB $ACTION`
+Now that we have our Cloud Functions created, we will expose them through the Bluemix API Gateway. To do this we use: `ibmcloud fn api create $BASE_PATH $API_PATH $API_VERB $ACTION`
 
 This feature is part of the [IBM Cloud Native API Management](https://console.ng.bluemix.net/docs/openwhisk/openwhisk_apigateway.html#openwhisk_apigateway) service and currently supports very powerful API management features like security, rate limiting, and more. For now though we're just using the CLI to expose our action with a public REST endpoint.
 
 ```bash
 # Exposes POST /v1/cat {"name": "Tahoma", "color": "Tabby"}
-bx wsk api create -n "Cats API" /v1 /cat post create-cat
+ibmcloud fn api create -n "Cats API" /v1 /cat post create-cat
 
 # Exposes /v1/cat?id=1
-bx wsk api create /v1 /cat get fetch-cat
+ibmcloud fn api create /v1 /cat get fetch-cat
 ```
 
 In both cases, the CLI will output the URL required to use the API. Make note of it for the next section.
@@ -132,21 +132,21 @@ curl $THE_URL_FROM_ABOVE?id=1
 
 ```bash
 # Remove API base which removes all the mappings
-bx wsk api delete /v1
+ibmcloud fn api delete /v1
 
 # Remove actions
-bx wsk action delete create-cat
-bx wsk action delete fetch-cat
+ibmcloud fn action delete create-cat
+ibmcloud fn action delete fetch-cat
 ```
 
 ## Troubleshooting
 
-Check for errors first in the Cloud Functions activation log. Tail the log on the command line with `bx wsk activation poll` or drill into details visually with the [Cloud Functions monitoring console](https://console.ng.bluemix.net/openwhisk/dashboard).
+Check for errors first in the Cloud Functions activation log. Tail the log on the command line with `ibmcloud fn activation poll` or drill into details visually with the [Cloud Functions monitoring console](https://console.ng.bluemix.net/openwhisk/dashboard).
 
-If the error is not immediately obvious, make sure you have the [latest version of the `bx wsk` CLI installed](https://console.ng.bluemix.net/openwhisk/learn/cli). If it's older than a few weeks, download an update.
+If the error is not immediately obvious, make sure you have the [latest version of the `ibmcloud fn` CLI installed](https://console.ng.bluemix.net/openwhisk/learn/cli). If it's older than a few weeks, download an update.
 
 ```bash
-bx wsk property get --cliversion
+ibmcloud fn property get --cliversion
 ```
 
 ## License

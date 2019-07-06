@@ -75,8 +75,8 @@ function main(params) {
 다음 단계에서는 방금 생성한 JavaScript 함수로 부터 OpenWhisk 액션을 생성하게 됩니다. 이들 액션에 `--web true`라는 플래그를 추가하여 "Web Actions"로서 인식하도록 합니다. 이는 나중에 REST 엔드 포인트를 추가할 때 필요합니다.
 
 ```bash
-bx wsk action create create-cat create-cat.js --web true
-bx wsk action create fetch-cat fetch-cat.js --web true
+ibmcloud fn action create create-cat create-cat.js --web true
+ibmcloud fn action create fetch-cat fetch-cat.js --web true
 ```
 
 ### 액션에 대해 단위 테스트하기
@@ -84,13 +84,13 @@ bx wsk action create fetch-cat fetch-cat.js --web true
 OpenWhisk 액션은 명백하게 호출되거나 이벤트에 대응하는 무상태(stateless) 코드 조각입니다. 지금은, 명백하게 호출하는 방법으로 액션을 테스트 하게 됩니다. 나중에는, HTTP 요청에 대응하여 액션을 호출하게 됩니다. 아래 코드로 액션을 호출하고 `--param` 명령줄 인수를 사용하여 매개 변수를 전달하십시오.
 
 ```bash
-bx wsk action invoke \
+ibmcloud fn action invoke \
   --blocking \
   --param name Tahoma \
   --param color Tabby \
   create-cat
 
-bx wsk action invoke \
+ibmcloud fn action invoke \
   --blocking \
   --param id 1 \
   fetch-cat
@@ -102,16 +102,16 @@ bx wsk action invoke \
 
 ### `/v1/cat` 엔드포인트에 대한 POST와 GET REST 매핑 생성하기
 
-지금까지 OpenWhisk 액션을 생성했고, 이제 Bluemix API 게이트웨이를 통해 OpenWhisk 액션을 노출하게 됩니다. 이를 위해 이 명령을 이용합니다: `bx wsk api create $BASE_PATH $API_PATH $API_VERB $ACTION`
+지금까지 OpenWhisk 액션을 생성했고, 이제 Bluemix API 게이트웨이를 통해 OpenWhisk 액션을 노출하게 됩니다. 이를 위해 이 명령을 이용합니다: `ibmcloud fn api create $BASE_PATH $API_PATH $API_VERB $ACTION`
 
 이 기능은 [Bluemix Native API Management](https://console.ng.bluemix.net/docs/openwhisk/openwhisk_apigateway.html#openwhisk_apigateway)의 일부이며 현재 보안, 속도 제한 등과 같은 매우 강력한 API 관리 기능을 제공합니다. 비록 지금은 단지 CLI를 사용하여 public REST endpoint로 액션을 노출하고 있습니다.
 
 ```bash
 # POST로 노출 /v1/cat {"name": "Tahoma", "color": "Tabby"}
-bx wsk api create -n "Cats API" /v1 /cat post create-cat
+ibmcloud fn api create -n "Cats API" /v1 /cat post create-cat
 
 # 노출 /v1/cat?id=1
-bx wsk api create /v1 /cat get fetch-cat
+ibmcloud fn api create /v1 /cat get fetch-cat
 ```
 
 CLI는 두 가지 경우 모두 API 이용을 위한 URL을 출력합니다. 다음 영역에서 사용을 위해 모든 정보를 기록해 두십시오.
@@ -134,21 +134,21 @@ curl $THE_URL_FROM_ABOVE?id=1
 
 ```bash
 # 모든 매핑을 제거하는 API 베이스 삭제
-bx wsk api delete /v1
+ibmcloud fn api delete /v1
 
 # 액션 삭제
-bx wsk action delete create-cat
-bx wsk action delete fetch-cat
+ibmcloud fn action delete create-cat
+ibmcloud fn action delete fetch-cat
 ```
 
 ## 문제 해결
 
-가장 먼저 OpenWhisk 활성화 로그에서 오류를 확인 하십시오. 명령창에서 `bx wsk activation poll`을 이용하여 로그 메시지를 확인하거나 [Bluemix의 모니터링 콘솔](https://console.ng.bluemix.net/openwhisk/dashboard)에서 시각적으로 상세정보를 확인해 보십시오.
+가장 먼저 OpenWhisk 활성화 로그에서 오류를 확인 하십시오. 명령창에서 `ibmcloud fn activation poll`을 이용하여 로그 메시지를 확인하거나 [Bluemix의 모니터링 콘솔](https://console.ng.bluemix.net/openwhisk/dashboard)에서 시각적으로 상세정보를 확인해 보십시오.
 
-오류가 즉각적으로 분명하지 않다면, [최신 버젼의 `bx wsk` CLI](https://console.ng.bluemix.net/openwhisk/learn/cli)가 설치되어 있는지 확인하십시오. 만약 이전 것이라면 다운로드하고 업데이트 하십시오.
+오류가 즉각적으로 분명하지 않다면, [최신 버젼의 `ibmcloud fn` CLI](https://console.ng.bluemix.net/openwhisk/learn/cli)가 설치되어 있는지 확인하십시오. 만약 이전 것이라면 다운로드하고 업데이트 하십시오.
 
 ```bash
-bx wsk property get --cliversion
+ibmcloud fn property get --cliversion
 ```
 
 ## 라이센스
